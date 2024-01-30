@@ -1,0 +1,626 @@
+openapi: 3.0.3
+info:
+  title: Swagger Petstore - OpenAPI 3.0
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/manager/v1/
+paths:
+  /auth/sign-up:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+        description: Входные данные
+        required: true
+      description: Регистрация пользователя
+      tags:
+        - Авторизация пользователя
+      responses:
+        '200':
+          description: Авторизационные данные пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUserResponceDto'
+        default:
+          description: Ошибка запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /auth/sign-in:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthUserDto'
+        description: Входные данные
+        required: true
+      description: Авторизация пользователя
+      tags:
+        - Авторизация пользователя
+      responses:
+        '200':
+          description: Авторизационные данные пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUserResponceDto'
+        default:
+          description: Ошибка запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /user/all:
+    get:
+      description: Вывод всех зарегистрированных пользователей
+      tags:
+        - Ослуживание пользователей
+      responses:
+        '200':
+          description: Список пользователей
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        default:
+          description: Ошибка запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /user/{user_id}:
+    get:
+      description: Поиск пользователя по идентификатору
+      tags:
+        - Ослуживание пользователей
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: Идентификатор пользователя
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Пользователь с введенным идентификатором
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: Ошибка запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /user/ban/{user_id}:
+    post:
+      description: Забанить пользователя
+      tags:
+        - Ослуживание пользователей
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: Идентификатор пользователя
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Деактевирование аккаунта пользователя
+          content:
+            application/json:
+              schema:
+                type: string
+        default:
+          description: Ошибка запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /user/detete/{user_id}:
+    delete:
+      description: Вывод всех зарегистрированных пользователей
+      tags:
+        - Ослуживание пользователей
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: Идентификатор пользователя
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Удаление пользователя
+          content:
+            application/json:
+              schema:
+                type: string
+        default:
+          description: Ошибка запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /task/create:
+    post:
+      description: Создание задачи
+      tags:
+        - Ослуживание задач
+      responses:
+        '200':
+          description: Атрибуты созданной задачи
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+        default:
+          description: Ошибка запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /task/all:
+    get:
+      description: Список задач
+      tags:
+        - Ослуживание задач
+      responses:
+        '200':
+          description: Список всех задач
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tasks'
+        default:
+          description: Ошибка запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /task/all/my:
+    get:
+      description: Список задач авторизованного пользователя
+      tags:
+        - Ослуживание задач
+      responses:
+        '200':
+          description: Список всех задач авторизованного пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tasks'
+        default:
+          description: Ошибка запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /task/{task_id}:
+    get:
+      description: Поиск задачи по идентификатору
+      tags:
+        - Ослуживание задач
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: Идентификатор задачи
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Задача с введенным идентификатором
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        default:
+          description: Ошибка запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /task/search/author:
+    get:
+      description: Поиск задач по автору
+      tags:
+        - Ослуживание задач
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: Имя автора
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список задач автора
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tasks'
+        default:
+          description: Ошибка запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /task/search/executor:
+    get:
+      description: Поиск задач по исполнителю
+      tags:
+        - Ослуживание задач
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: Имя исполнителя
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список задач исполнителя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tasks'
+        default:
+          description: Ошибка запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /task/change/status/{task_id}:
+    get:
+      description: Изменение статуса задачи исполнителем
+      tags:
+        - Ослуживание задач
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: Идентификатор задачи
+          schema:
+            type: string
+        - name: status
+          in: query
+          required: true
+          description: Новый статус задачи
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Задача с обновленным статусом
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        default:
+          description: Ошибка запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /task/{task_id}/assign/{executor_id}:
+    get:
+      description: Изменение статуса задачи исполнителем
+      tags:
+        - Ослуживание задач
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: Идентификатор задачи
+          schema:
+            type: string
+        - name: executor_id
+          in: path
+          required: true
+          description: Идентификатор исполнителя
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Задача с назанченным исполнителем
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        default:
+          description: Ошибка запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /task/edit/{task_id}:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskDto'
+        description: Новые данные задачи
+        required: true
+      description: Редатирование задачи
+      tags:
+        - Ослуживание задач
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: Идентификатор задачи
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Отредактированная задача
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+        default:
+          description: Ошибка запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /task/comment/{task_id}:
+    get:
+      description: Добавление комментария к задаче
+      tags:
+        - Ослуживание задач
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: Идентификатор задачи
+          schema:
+            type: string
+        - name: comment
+          in: query
+          required: true
+          description: Комментарий
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Все комментарии к данной задаче
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+        default:
+          description: Ошибка запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+components:
+  schemas:
+    User:
+      required:
+        - name
+        - phoneNumber
+        - email
+        - password
+      properties:
+        id:
+          type: number
+          description: ''
+        name:
+          type: string
+          description: ''
+          example: Kirill
+        phoneNumber:
+          type: string
+          description: ''
+          example: '89999999999'
+        email:
+          type: string
+          description: ''
+          example: test@mail.ru
+        password:
+          type: string
+          description: ''
+          example: '1234'
+        active:
+          type: boolean
+          description: ''
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
+          description: ''
+        dateOfCreate:
+          type: string
+          format: date-time
+          description: ''
+    UserDto:
+      required:
+        - name
+        - phoneNumber
+        - email
+      properties:
+        id:
+          type: number
+          description: ''
+        name:
+          type: string
+          description: ''
+          example: Kirill
+        phoneNumber:
+          type: string
+          description: ''
+          example: '89999999999'
+        email:
+          type: string
+          description: ''
+          example: test@mail.ru
+    UserCommentDto:
+      required:
+        - name
+        - phoneNumber
+      properties:
+        name:
+          type: string
+          description: ''
+          example: Kirill
+        email:
+          type: string
+          description: ''
+          example: test@mail.ru
+    Users:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+    AuthUserDto:
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          description: ''
+          example: test@mail.ru
+        token:
+          type: string
+          description: ''
+          example: '1234'
+    AuthUserResponceDto:
+      required:
+        - email
+        - token
+      properties:
+        email:
+          type: string
+          description: ''
+        token:
+          type: string
+          description: ''
+    Role:
+      enum:
+        - ROLE_USER
+        - ROLE_ADMIN
+    Task:
+      required:
+        - header
+        - description
+        - status
+        - priority
+        - author
+        - executor
+        - comments
+      properties:
+        id:
+          type: number
+          description: ''
+        header:
+          type: string
+          description: ''
+          example: TestTask
+        description:
+          type: string
+          description: ''
+          example: Task for testing
+        status:
+          type: string
+          enum:
+            - HIGH
+            - MEDIUM
+            - LOW
+          description: ''
+          example: LOW
+        priority:
+          type: string
+          enum:
+            - IN_WAITING
+            - IN_PROGRESS
+            - COMPLETED
+          description: ''
+          example: IN_WAITING
+        author:
+          $ref: '#/components/schemas/UserDto'
+        executor:
+          $ref: '#/components/schemas/UserDto'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentDto'
+          description: ''
+    TaskDto:
+      required:
+        - header
+        - description
+        - status
+        - priority
+      properties:
+        header:
+          type: string
+          description: ''
+          example: TestTask
+        description:
+          type: string
+          description: ''
+          example: Task for testing
+        status:
+          type: string
+          enum:
+            - HIGH
+            - MEDIUM
+            - LOW
+          description: ''
+          example: LOW
+        priority:
+          type: string
+          enum:
+            - IN_WAITING
+            - IN_PROGRESS
+            - COMPLETED
+          description: ''
+          example: IN_WAITING
+    Tasks:
+      type: array
+      items:
+        $ref: '#/components/schemas/Task'
+    Comment:
+      required:
+        - content
+        - author
+        - task
+      properties:
+        id:
+          type: number
+          description: ''
+        content:
+          type: string
+          description: ''
+          example: Good!
+        author:
+          $ref: '#/components/schemas/UserDto'
+        task:
+          $ref: '#/components/schemas/UserDto'
+    CommentDto:
+      required:
+        - content
+        - author
+      properties:
+        content:
+          type: string
+          description: ''
+          example: Good!
+        author:
+          $ref: '#/components/schemas/UserCommentDto'
+    ApiError:
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: ''

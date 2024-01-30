@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/TaskManagerSystem_TT_EM
+    username: postgres
+    password: 123123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  mvc:
+    servlet:
+      path: /v1
+
+server:
+  servlet:
+    context-path: /manager
+jwt:
+  token:
+    secret: 8624F664D24851A74CDCD161617F8C5533B3C264CC6CAECD28CD4835FA662AF6
+    expired: 3600000
